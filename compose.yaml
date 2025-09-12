@@ -1,0 +1,44 @@
+services:
+  web:
+    image: kvl/app-animals:1.0.5
+    container_name: app
+    hostname: app
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    depends_on:
+      - db
+    networks:
+      backend:
+        ipv4_address: 172.20.0.5
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    hostname: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./databases/animals.db:/var/lib/mysql
+
+    restart: unless-stopped
+    networks:
+      backend:
+        ipv4_address: 172.20.0.10
+
+networks:
+    backend:
+      name: docker_net
+      driver: bridge
+      ipam:
+        config:
+            - subnet: 172.20.0.0/24
