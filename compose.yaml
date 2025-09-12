@@ -1,6 +1,7 @@
 services:
   web:
-    image: kvl/app-animals:1.0.5
+#    image: kvl/app-animals:1.0.5
+    image: cr.yandex/crph6m4t1ag4j0nkaljt/app-animals:1.0.5
     container_name: app
     hostname: app
     environment:
